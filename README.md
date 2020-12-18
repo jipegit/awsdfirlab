@@ -3,6 +3,8 @@ DFIR Lab in AWS
 
 This stack is 100% free-tier eligible.
 
+![AWS DFIR Lab](DFIR_Lab_AWS.png "AWS DFIR Lab")
+
 # AWS account Setup
  * Create an [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
  * Set-up [MFA authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html)
@@ -39,4 +41,4 @@ The DC can be created on the Windows Server 2019 instance which has a static IP 
  * Change its DNS server to *DC-01* (ie. 10.42.0.42) in the Network Adapter / IPv4 settings
  * [Join the *dfirlab.local* domain](https://www.dtonias.com/windows-server-2016-join-domain/) using the domain admin account (*adm-one*) so that it creates the computer account in the AD and restart
 
- Your lab environement is ready 🥳
+ Your lab environment is ready 🥳
