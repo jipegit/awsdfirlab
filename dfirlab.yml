@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation DFIR lab Template : This template
+  creates 2 EC2 instance, one t2.micro Windows Server 2019 and one t2.micro Windows server 2016. Both are in a any-any security group.'
+Parameters:
+  RDPLocation:
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: The IP address range that can be used to RDP to the EC2 instances
+    MaxLength: 18
+    MinLength: 9
+    Type: String
+  KeyPair:
+    AllowedPattern: .+
+    Description: The Keypair name to use with EC2 instances
+    MinLength: 1
+    Type: String
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.42.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: Name
+        Value:  !Join ['', [!Ref "AWS::StackName", "-vpc" ]]
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+        Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-ig" ]]
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: InternetGateway
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      CidrBlock: 10.42.0.0/24
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-subnet-windows" ]]
+      VpcId: 
+        Ref: VPC
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-rt" ]]
+      VpcId: 
+        Ref: VPC
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: 
+        Ref: RouteTable
+      SubnetId: 
+        Ref: Subnet
+  Route:
+    Type: AWS::EC2::Route
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: InternetGateway
+      RouteTableId: 
+        Ref: RouteTable
+  InGressSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Allow RDP inbound traffic from RDPLocation parameter
+      GroupName: ExternalInboundSecurityGroup
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          CidrIp:
+            Ref: RDPLocation
+          Description: Allow RDP traffic
+          ToPort: 3389
+          FromPort: 3389
+      VpcId:
+        Ref: VPC
+  LanSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Allow all inbound traffic on the lan
+      GroupName: LanSecurityGroup
+      SecurityGroupIngress: 
+        - IpProtocol: -1
+          CidrIp: 10.42.0.0/24
+          Description: All inbound traffic
+      VpcId:
+        Ref: VPC
+  WindowsServer2019:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-03c0b6eae63b5a75c  # Microsoft Windows Server 2019 Base
+      InstanceType: t2.micro
+      KeyName: 
+        Ref: KeyPair
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: true
+        DeviceIndex: 0
+        PrivateIpAddress: 10.42.0.42  # Needs a static IP as it will become a DC
+        SubnetId:
+          Ref: Subnet
+        GroupSet:
+        - !Ref InGressSecurityGroup
+        - !Ref LanSecurityGroup
+      Tags: 
+        - Key: Name
+          Value: Windows Server 2019
+  WindowsServer2016:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-09e51cb880e38038d  # Microsoft Windows Server 2016 Base
+      InstanceType: t2.micro
+      KeyName: 
+        Ref: KeyPair
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: true
+        DeviceIndex: 0
+        SubnetId:
+          Ref: Subnet
+        GroupSet:
+        - !Ref InGressSecurityGroup
+        - !Ref LanSecurityGroup
+      Tags: 
+      - Key: Name
+        Value: Windows Server 2016
