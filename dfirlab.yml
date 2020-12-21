@@ -12,8 +12,8 @@ Parameters:
   KeyPair:
     AllowedPattern: .+
     Description: The Keypair name to use with EC2 instances
+    Type: AWS::EC2::KeyPair::KeyName
     MinLength: 1
-    Type: String
 Resources:
   VPC:
     Type: AWS::EC2::VPC
