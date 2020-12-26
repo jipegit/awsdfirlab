@@ -42,3 +42,6 @@ The DC can be created on the Windows Server 2019 instance which has a static IP 
  * [Join the *dfirlab.local* domain](https://www.dtonias.com/windows-server-2016-join-domain/) using the domain admin account (*adm-one*) so that it creates the computer account in the AD and restart
 
  Your lab environment is ready 🥳
+
+ # Support
+ You can [buy me a coffee 😊](https://www.buymeacoffee.com/jipe)
