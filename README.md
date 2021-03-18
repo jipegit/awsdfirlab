@@ -1,8 +1,6 @@
 # awsdfirlab
 DFIR Lab in AWS
 
-This stack is 100% free-tier eligible.
-
 ![AWS DFIR Lab](DFIR_Lab_AWS.png "AWS DFIR Lab")
 
 # AWS account Setup
