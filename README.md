@@ -42,4 +42,5 @@ The DC can be created on the Windows Server 2019 instance which has a static IP 
  Your lab environment is ready 🥳
 
  # Support
- You can [buy me a coffee 😊](https://www.buymeacoffee.com/jipe)
+
+[![Buy me a coffee :)](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/jipe "Buy me a coffee :)")
