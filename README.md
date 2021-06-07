@@ -13,10 +13,10 @@ DFIR Lab in AWS
 
 Use the `aws cloudformation` CLI command to create the stack.
 
-In this example the STS token is store in the `mfa` profile of our ~/.aws/credential file. The KeyPair name created above is `lab-01`.
+In this example the STS token is store in the `mfa` profile of our ~/.aws/credentials file. The KeyPair name created above is `lab-01`.
 
  1. `aws sts get-session-token --serial-number arn:aws:iam::XXXXXXXXXXXX:mfa/root-account-mfa-device --token-code XXXXXX`
- 2. Edit your `~/.aws/credential`
+ 2. Edit your `~/.aws/credentials`
  3. `aws --profile mfa cloudformation create-stack --stack-name dfir-lab-01 --parameters ParameterKey=RDPLocation,ParameterValue=YOUR_IP_ADDRESS/32 ParameterKey=KeyPair,ParameterValue=lab-01 --template-body file://dfirlab.yml`
 
 # Windows environement Setup
