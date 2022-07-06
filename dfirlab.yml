@@ -98,7 +98,7 @@ Resources:
   WindowsServer2019:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0d28ca2479c6273e4  # Microsoft Windows Server 2019 Base
+      ImageId: ami-0c0986e56543271b2  # Microsoft Windows Server 2019 Base
       InstanceType: t2.micro
       KeyName: 
         Ref: KeyPair
@@ -117,7 +117,7 @@ Resources:
   WindowsServer2016:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09b0b0e82ce62cdc1  # Microsoft Windows Server 2016 Base
+      ImageId: ami-0685612e463966fb0  # Microsoft Windows Server 2016 Base
       InstanceType: t2.micro
       KeyName: 
         Ref: KeyPair
